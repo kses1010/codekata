@@ -1,5 +1,11 @@
+import Dice from "./Dice";
+
 function App() {
-  return <div>App 컴포넌트!</div>;
+    return (
+        <div>
+            <Dice/>
+        </div>
+    );
 }
 
 export default App;
