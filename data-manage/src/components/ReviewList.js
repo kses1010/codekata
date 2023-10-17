@@ -1,16 +1,16 @@
-import "./ReviewList.css";
+import './ReviewList.css';
 
 function formatDate(value) {
     const date = new Date(value);
     return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}`;
 }
 
-function ReviewListItem({item, onDelete}) {
+function ReviewListItem({ item, onDelete }) {
     const handleDeleteClick = () => onDelete(item.id);
 
     return (
-        <div className="ReviewListItem">
-            <img className="ReviewListItem-img" src={item.imgUrl} alt={item.title}/>
+        <div className='ReviewListItem'>
+            <img className='ReviewListItem-img' src={item.imgUrl} alt={item.title} />
             <div>
                 <h1>{item.title}</h1>
                 <p>{item.rating}</p>
@@ -22,13 +22,14 @@ function ReviewListItem({item, onDelete}) {
     );
 }
 
-function ReviewList({items, onDelete}) {
+function ReviewList({ items, onDelete }) {
     return (
         <ul>
             {items.map((item) => {
                 return (
-                    <li>
-                        <ReviewListItem item={item} onDelete={onDelete}/>
+                    <li key={item.id}>
+                        <ReviewListItem item={item} onDelete={onDelete} />
+                        <input></input>
                     </li>);
             })}
         </ul>
