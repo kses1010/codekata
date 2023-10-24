@@ -3,8 +3,11 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import DetailPage from './pages/DetailPage';
+import { useState } from 'react';
+import { data } from './data';
 
 function App() {
+  const [shoes, setShoes] = useState(data);
   const navigate = useNavigate();
 
   return (
@@ -20,12 +23,12 @@ function App() {
       </Navbar>
 
       <Routes>
-        <Route path='/' element={<HomePage />} />
+        <Route path='/' element={<HomePage shoes={shoes} />} />
         <Route path='/event' element={<Event />}>
           <Route path='one' element={<div>첫 주문시 양배추즙 서비스</div>}></Route>
           <Route path='two' element={<div>생일기념 쿠폰받기</div>}></Route>
         </Route>
-        <Route path='/detail' element={<DetailPage />} />
+        <Route path='/detail/:id' element={<DetailPage shoes={shoes} />}></Route>
         <Route path='/about' element={<About />}>
           <Route path='member' element={<div>멤버임</div>} />
           <Route path='location' element={<div>지역</div>} />

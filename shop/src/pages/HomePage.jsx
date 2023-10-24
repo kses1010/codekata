@@ -1,11 +1,8 @@
-import { useState } from 'react';
-import { data } from '../data';
 import bg from '../assets/img.png';
 import { Container, Row } from 'react-bootstrap';
 import Card from '../components/Card';
 
-function HomePage() {
-  const [shoes, setShoes] = useState(data);
+function HomePage({ shoes }) {
 
   return (
     <>
