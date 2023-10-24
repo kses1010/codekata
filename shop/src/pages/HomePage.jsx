@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { data } from '../data';
 import bg from '../assets/img.png';
 import { Container, Row } from 'react-bootstrap';
-import Card from './Card';
+import Card from '../components/Card';
 
-export default function HomePage() {
+function HomePage() {
   const [shoes, setShoes] = useState(data);
 
   return (
@@ -22,3 +22,5 @@ export default function HomePage() {
     </>
   );
 }
+
+export default HomePage;
