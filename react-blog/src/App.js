@@ -95,8 +95,8 @@ class ModalClass extends React.Component {
     super(props);
     this.state = {
       name: 'Son',
-      age: 20
-    }
+      age: 20,
+    };
   }
 
   render() {
@@ -104,10 +104,11 @@ class ModalClass extends React.Component {
       <div>
         안녕 {this.state.name} {this.state.age} {this.props.hello}
         <button onClick={() => {
-          this.setState({ age: this.state.age + 1})
-        }}>버튼</button>
+          this.setState({ age: this.state.age + 1 });
+        }}>버튼
+        </button>
       </div>
-    )
+    );
   }
 }
 
