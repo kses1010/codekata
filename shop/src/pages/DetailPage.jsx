@@ -4,15 +4,20 @@ import React, { useEffect, useState } from 'react';
 
 function DetailPage({ shoes }) {
 
-  useEffect(() => {
-    setTimeout(() => {
-      setAlert(false);
-    }, 2000);
-  });
-
   const [alert, setAlert] = useState(true);
   const { id } = useParams();
   const shoe = shoes.find((item) => item.id === Number(id));
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAlert(false);
+    }, 2000);
+
+    return () => {
+      // 기존 타이머는 제거
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <div className='container'>
