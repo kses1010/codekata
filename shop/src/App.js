@@ -1,12 +1,10 @@
 import './App.css';
-import { Col, Container, Nav, Navbar, Row } from 'react-bootstrap';
-import bg from './assets/img.png';
-import { useState } from 'react';
-import { data } from './data';
+import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Link, Route, Routes } from 'react-router-dom';
+import HomePage from './components/HomePage';
+import DetailPage from './components/DetailPage';
 
 function App() {
-  const [shoes, setShoes] = useState(data);
-
   return (
     <div className='App'>
       <Navbar bg='dark' variant='dark'>
@@ -19,29 +17,14 @@ function App() {
         </Container>
       </Navbar>
 
-      <div className='main-bg' style={{ backgroundImage: `url(${bg})` }}></div>
+      <Link to='/'>홈</Link>
+      <Link to='/detail'>상세페이지</Link>
 
-      <Container>
-        <Row>
-          {shoes.map((shoe) => {
-            return (
-              <Card shoe={shoe} key={shoe.id}></Card>
-            );
-          })}
-        </Row>
-      </Container>
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/detail' element={<DetailPage />} />
+      </Routes>
     </div>
-  );
-}
-
-function Card({ shoe }) {
-  return (
-    <Col>
-      <img src={`${shoe.image}`} alt='' width='80%' />
-      <h4>{shoe.title}</h4>
-      <p>{shoe.content}</p>
-      <p>{shoe.price}</p>
-    </Col>
   );
 }
 
