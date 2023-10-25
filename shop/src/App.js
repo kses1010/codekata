@@ -5,10 +5,19 @@ import HomePage from './pages/HomePage';
 import DetailPage from './pages/DetailPage';
 import { useState } from 'react';
 import { data } from './data';
+import axios from 'axios';
 
 function App() {
   const [shoes, setShoes] = useState(data);
   const navigate = useNavigate();
+
+  const handleMoreLoad = () => {
+    axios.get('https://codingapple1.github.io/shop/data2.json')
+      .then((response) => {
+        const copy = [...shoes, ...response.data];
+        setShoes(copy);
+      });
+  }
 
   return (
     <div className='App'>
@@ -23,7 +32,7 @@ function App() {
       </Navbar>
 
       <Routes>
-        <Route path='/' element={<HomePage shoes={shoes} />} />
+        <Route path='/' element={<HomePage shoes={shoes} handleMoreLoad={handleMoreLoad}/>} />
         <Route path='/event' element={<Event />}>
           <Route path='one' element={<div>첫 주문시 양배추즙 서비스</div>}></Route>
           <Route path='two' element={<div>생일기념 쿠폰받기</div>}></Route>
