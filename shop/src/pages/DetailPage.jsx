@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Nav } from 'react-bootstrap';
+import { Context1 } from '../App';
 
 function DetailPage({ shoes }) {
 
@@ -71,6 +72,7 @@ function DetailPage({ shoes }) {
 
 function TabContent({ tap }) {
   const [fade, setFade] = useState('');
+  const { product, shoes } = useContext(Context1);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -85,7 +87,7 @@ function TabContent({ tap }) {
 
   return (
     <div className={`start ${fade}`}>
-      {[<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tap]}
+      {[<div>{shoes[0].title}</div>, <div>내용1</div>, <div>내용2</div>][tap]}
     </div>
   );
 }

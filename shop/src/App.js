@@ -3,12 +3,15 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import DetailPage from './pages/DetailPage';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import { data } from './data';
 import axios from 'axios';
 
+export const Context1 = createContext();
+
 function App() {
   const [shoes, setShoes] = useState(data);
+  const [product, setProduct] = useState([10, 11, 12]);
   const navigate = useNavigate();
 
   const handleMoreLoad = () => {
@@ -17,7 +20,7 @@ function App() {
         const copy = [...shoes, ...response.data];
         setShoes(copy);
       });
-  }
+  };
 
   return (
     <div className='App'>
@@ -32,12 +35,17 @@ function App() {
       </Navbar>
 
       <Routes>
-        <Route path='/' element={<HomePage shoes={shoes} handleMoreLoad={handleMoreLoad}/>} />
+        <Route path='/' element={<HomePage shoes={shoes} handleMoreLoad={handleMoreLoad} />} />
         <Route path='/event' element={<Event />}>
           <Route path='one' element={<div>첫 주문시 양배추즙 서비스</div>}></Route>
           <Route path='two' element={<div>생일기념 쿠폰받기</div>}></Route>
         </Route>
-        <Route path='/detail/:id' element={<DetailPage shoes={shoes} />}></Route>
+        <Route path='/detail/:id' element={
+          <Context1.Provider value={{product, shoes}}>
+            <DetailPage shoes={shoes} />
+          </Context1.Provider>
+        }>
+        </Route>
         <Route path='/about' element={<About />}>
           <Route path='member' element={<div>멤버임</div>} />
           <Route path='location' element={<div>지역</div>} />
