@@ -2,6 +2,8 @@ import { useParams } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import { Context1 } from '../App';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../redux/Store';
 
 function DetailPage({ shoes }) {
 
@@ -9,6 +11,7 @@ function DetailPage({ shoes }) {
   const { id } = useParams();
   const [tap, setTap] = useState(0);
   const [fade, setFade] = useState('');
+  const dispatch = useDispatch();
 
   const shoe = shoes.find((item) => item.id === Number(id));
 
@@ -44,7 +47,13 @@ function DetailPage({ shoes }) {
           <h4 className='pt-5'>{shoe.title}</h4>
           <p>{shoe.content}</p>
           <p>{shoe.price}원</p>
-          <button className='btn btn-danger'>주문하기</button>
+          <button className='btn btn-danger' onClick={() => {
+            dispatch(addItem({
+              id: id,
+              name: shoe.title,
+              count: 1
+            }));
+          }}>주문하기</button>
         </div>
       </div>
 
