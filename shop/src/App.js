@@ -6,6 +6,7 @@ import DetailPage from './pages/DetailPage';
 import { createContext, useState } from 'react';
 import { data } from './data';
 import axios from 'axios';
+import Cart from './pages/Cart';
 
 export const Context1 = createContext();
 
@@ -29,7 +30,7 @@ function App() {
           <Navbar.Brand href='#home'>Shop</Navbar.Brand>
           <Nav className='me-auto'>
             <Nav.Link onClick={() => navigate('/')}>Home</Nav.Link>
-            <Nav.Link onClick={() => navigate('/detail')}>Detail</Nav.Link>
+            <Nav.Link onClick={() => navigate('/cart')}>Cart</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -46,6 +47,7 @@ function App() {
           </Context1.Provider>
         }>
         </Route>
+        <Route path='/cart' element={<Cart />}></Route>
         <Route path='/about' element={<About />}>
           <Route path='member' element={<div>멤버임</div>} />
           <Route path='location' element={<div>지역</div>} />
