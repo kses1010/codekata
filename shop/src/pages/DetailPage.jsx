@@ -7,22 +7,28 @@ function DetailPage({ shoes }) {
   const [alert, setAlert] = useState(true);
   const { id } = useParams();
   const [tap, setTap] = useState(0);
+  const [fade, setFade] = useState('');
 
   const shoe = shoes.find((item) => item.id === Number(id));
 
   useEffect(() => {
+    const time = setTimeout(() => {
+      setFade('end');
+    }, 500);
     const timer = setTimeout(() => {
       setAlert(false);
     }, 2000);
 
     return () => {
       // 기존 타이머는 제거
+      clearTimeout(time);
+      setFade('');
       clearTimeout(timer);
     };
   }, []);
 
   return (
-    <div className='container'>
+    <div className={`container start ${fade}`}>
       {alert === true ?
         <div className='alert alert-warning'>
           2초 이내 구매시 할인
@@ -44,27 +50,44 @@ function DetailPage({ shoes }) {
       <Nav variant='tabs' defaultActiveKey='link0'>
         <Nav.Item>
           <Nav.Link onClick={() => {
-            setTap(0)
+            setTap(0);
           }} eventKey='link0'>버튼0</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link onClick={() => {
-            setTap(1)
+            setTap(1);
           }} eventKey='link1'>버튼1</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link onClick={() => {
-            setTap(2)
+            setTap(2);
           }} eventKey='link2'>버튼2</Nav.Link>
         </Nav.Item>
       </Nav>
-      <TabContent tap={tap}/>
+      <TabContent tap={tap} />
     </div>
   );
 }
 
 function TabContent({ tap }) {
-  return [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tap];
+  const [fade, setFade] = useState('');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFade('end');
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      setFade('');
+    };
+  }, [tap]);
+
+  return (
+    <div className={`start ${fade}`}>
+      {[<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tap]}
+    </div>
+  );
 }
 
 export default DetailPage;
