@@ -6,14 +6,21 @@ import { useDispatch } from 'react-redux';
 import { addItem } from '../redux/Store';
 
 function DetailPage({ shoes }) {
-
   const [alert, setAlert] = useState(true);
   const { id } = useParams();
+  const shoe = shoes.find((item) => item.id === Number(id));
   const [tap, setTap] = useState(0);
   const [fade, setFade] = useState('');
   const dispatch = useDispatch();
 
-  const shoe = shoes.find((item) => item.id === Number(id));
+  useEffect(() => {
+    const arr = JSON.parse(localStorage.getItem('watched'));
+    arr.push(shoe.id);
+    const sets = new Set(arr);
+    localStorage.setItem('watched', JSON.stringify(Array.from(sets)));
+
+  }, [shoe.id]);
+
 
   useEffect(() => {
     const time = setTimeout(() => {

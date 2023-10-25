@@ -3,7 +3,7 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import DetailPage from './pages/DetailPage';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { data } from './data';
 import axios from 'axios';
 import Cart from './pages/Cart';
@@ -14,6 +14,13 @@ function App() {
   const [shoes, setShoes] = useState(data);
   const [product, setProduct] = useState([10, 11, 12]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem('watched')) {
+      localStorage.setItem('watched', JSON.stringify([]));
+    }
+
+  }, []);
 
   const handleMoreLoad = () => {
     axios.get('https://codingapple1.github.io/shop/data2.json')
@@ -42,7 +49,7 @@ function App() {
           <Route path='two' element={<div>생일기념 쿠폰받기</div>}></Route>
         </Route>
         <Route path='/detail/:id' element={
-          <Context1.Provider value={{product, shoes}}>
+          <Context1.Provider value={{ product, shoes }}>
             <DetailPage shoes={shoes} />
           </Context1.Provider>
         }>
