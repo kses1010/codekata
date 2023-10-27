@@ -2,15 +2,19 @@ import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { increase } from '../redux/useSlice';
 import { addCount } from '../redux/Store';
+import { useState } from 'react';
+
 
 function Cart() {
 
   const user = useSelector((state) => state.user);
   const stock = useSelector((state) => state.stock);
   const disPatch = useDispatch();
+  const [count, setCount] = useState(0);
 
   return (
     <div>
+
       <h4>{user.name} {user.age}의 장바구니</h4>
       <button onClick={() => {
         disPatch(increase(10));
