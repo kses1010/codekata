@@ -1,7 +1,8 @@
 import axios from '@/lib/axios';
-import SizeReviewList from '@/components/SizeReviewList';
+import SizeReviewList, { SizeReview } from '@/components/SizeReviewList';
 import Image from 'next/image';
 import styles from '@/styles/Product.module.css';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 export type ProductType = {
   id: number,
@@ -33,7 +34,41 @@ export async function getServerSideProps(context: any) {
   };
 }
 
-export default function Product({ product, sizeReviews }: any) {
+export default function Product({ product, sizeReviews: initialSizeReviews }: any) {
+  const [sizeReviews, setSizeReviews] = useState<SizeReview[]>(initialSizeReviews);
+  const [formValue, setFormValue] = useState({
+    size: 'M',
+    sex: 'male',
+    height: 173,
+    fit: 'good',
+  });
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const sizeReview = {
+      ...formValue,
+      productId: product.id
+    };
+    const res = await axios.post('/size_reviews/', sizeReview);
+    const newSizeReview = res.data;
+    setSizeReviews((prevSizeReviews) => [
+      newSizeReview,
+      ...prevSizeReviews
+    ]);
+  }
+
+  async function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    handleChange(name, value);
+  }
+
+  async function handleChange(name: string, value: string) {
+    setFormValue({
+      ...formValue,
+      [name]: value,
+    });
+  }
+
   if (!product) return null; // 로딩화면
 
   return (

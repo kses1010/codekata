@@ -10,7 +10,7 @@ const labels: any = {
   },
 };
 
-type SizeReview = {
+export type SizeReview = {
   id: number,
   createdAt: Date,
   sex: string,
