@@ -12,17 +12,42 @@ export type ProductType = {
   price: number,
 }
 
-export default function Product() {
-  const [product, setProduct] = useState<ProductType>();
+export async function getStaticPaths() {
+  const res = await axios.get('/products/');
+  const products: ProductType[] = res.data.results;
+  const paths = products.map((product) => ({
+    params: {id: String(product.id)},
+  }));
+
+  return {
+    paths,
+    fallback: true,
+  };
+}
+
+export async function getStaticProps(context: any) {
+  const productId = context.params['id'];
+  let product;
+  try {
+    const res = await axios.get(`/products/${productId}`);
+    product = res.data;
+  } catch {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      product,
+    },
+  };
+}
+
+export default function Product({ product }: any) {
   const [sizeReviews, setSizeReviews] = useState([]);
   const router = useRouter();
   const { id } = router.query;
-
-  async function getProduct(targetId: string) {
-    const res = await axios.get(`/products/${targetId}`);
-    const nextProduct = res.data;
-    setProduct(nextProduct);
-  }
 
   async function getSizeReviews(targetId: string) {
     const res = await axios.get(`/size_reviews/?product_id=${targetId}`);
@@ -36,12 +61,11 @@ export default function Product() {
         return;
       }
 
-      getProduct(id);
       getSizeReviews(id);
     }
   }, [id]);
 
-  if (!product) return null;
+  if (!product) return null; // 로딩화면
 
   return (
     <div>
