@@ -1,30 +1,22 @@
-import { useRouter } from 'next/router';
 import SearchForm from '@/components/SearchForm';
 import ProductList from '@/components/ProductList';
-import { useEffect, useState } from 'react';
 import axios from '@/lib/axios';
 
-export default function Search() {
-  const [products, setProducts] = useState([]);
-  const router = useRouter();
-  const { q } = router.query;
+export async function getServerSideProps(context: any) {
+  const q = context.query['q'];
 
-  async function getProducts(query: string) {
-    const res = await axios.get(`/products/?q=${query}`);
-    const nextProducts = res.data.results;
-    setProducts(nextProducts);
-  }
+  const res = await axios.get(`/products/?q=${q}`);
+  const products = res.data.results ?? [];
 
-  useEffect(() => {
-    if (typeof q === 'string') {
-      getProducts(q);
-    }
-  }, [q]);
+  return {
+    props: {
+      q,
+      products,
+    },
+  };
+}
 
-  if (typeof q !== 'string') {
-    return null;
-  }
-
+export default function Search({ q, products }: any) {
   return (
     <div>
       <h1>Search 페이지</h1>
