@@ -1,22 +1,20 @@
 import SearchForm from '@/components/SearchForm';
 import ProductList from '@/components/ProductList';
-import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import axios from '@/lib/axios';
 
-export default function Home() {
-  const [products, setProducts] = useState([]);
+export async function getStaticProps() {
+  const res = await axios.get('/products');
+  const products = res.data.results;
 
-  async function getProducts() {
-    const res = await axios.get('/products');
-    const nextProducts = res.data.results;
-    setProducts(nextProducts);
+  return {
+    props: {
+      products,
+    }
   }
+}
 
-  useEffect(() => {
-    getProducts();
-  }, []);
-
+export default function Home({ products }: any) {
   return (
     <div>
       <Head>
