@@ -5,10 +5,14 @@ import styles from '@/app/page.module.css';
 import Image from 'next/image';
 import zLogo from '/public/zlogo.png';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function Login() {
   const router = useRouter();
-  router.replace('/i/flow/login');
+  useEffect(() => {
+    router.replace('/i/flow/login');
+  }, [router]);
+
   return (
     <>
       <div className={styles.left}>
