@@ -12,13 +12,13 @@ dayjs.locale('ko');
 dayjs.extend(relativeTime);
 
 type Props = {
-  noImage?: boolean,
-  post: Post
-}
+  noImage?: boolean;
+  post: Post;
+};
 
 export default function Post({ noImage, post }: Props) {
   const target = post;
-  
+
   return (
     <PostArticle post={target}>
       <div className={style.postWrapper}>
@@ -39,9 +39,11 @@ export default function Post({ noImage, post }: Props) {
             <span className={style.postDate}>{dayjs(target.createdAt).fromNow(true)}</span>
           </div>
           <div>{target.content}</div>
-          <div>
-            <PostImages post={target} />
-          </div>
+          {!noImage && (
+            <div>
+              <PostImages post={target} />
+            </div>
+          )}
           <ActionButtons />
         </div>
       </div>

@@ -18,7 +18,6 @@ export default function UserPosts({ username }: Props) {
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData(['users', username]);
 
-  console.log(user);
   if (user) {
     return (
       <>
