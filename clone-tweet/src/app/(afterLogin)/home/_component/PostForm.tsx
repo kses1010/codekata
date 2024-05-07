@@ -1,10 +1,10 @@
 'use client';
 
-import { ChangeEventHandler, FormEventHandler, useRef, useState } from 'react';
+import { ChangeEventHandler, FormEvent, useRef, useState } from 'react';
 import style from './postForm.module.css';
 import { Session } from '@auth/core/types';
 import TextareaAutosize from 'react-textarea-autosize';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Post } from '@/model/Post';
 
 type Props = {
@@ -21,23 +21,25 @@ export default function PostForm({ me }: Props) {
     setContent(e.target.value);
   };
 
-  const onSubmit: FormEventHandler = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('content', content);
-    preview.forEach((p) => {
-      p && formData.append('images', p.file);
-    });
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`, {
+  const mutation = useMutation({
+    mutationFn: async (e: FormEvent) => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('content', content);
+      preview.forEach((p) => {
+        p && formData.append('images', p.file);
+      });
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`, {
         method: 'post',
         credentials: 'include',
         body: formData,
       });
-      if (response.status === 201) {
-        setContent('');
-        setPreview([]);
-        const newPost = await response.json();
+    },
+    async onSuccess(response, variable, context) {
+      const newPost = await response.json();
+      setContent('');
+      setPreview([]);
+      if (queryClient.getQueryData(['posts', 'recommends'])) {
         queryClient.setQueryData(['posts', 'recommends'], (prevData: { pages: Post[][] }) => {
           const shallow = {
             ...prevData,
@@ -47,6 +49,8 @@ export default function PostForm({ me }: Props) {
           shallow.pages[0].unshift(newPost);
           return shallow;
         });
+      }
+      if (queryClient.getQueryData(['posts', 'followings'])) {
         queryClient.setQueryData(['posts', 'followings'], (prevData: { pages: Post[][] }) => {
           const shallow = {
             ...prevData,
@@ -57,11 +61,12 @@ export default function PostForm({ me }: Props) {
           return shallow;
         });
       }
-    } catch (err) {
-      console.error(err);
+    },
+    onError(error) {
+      console.error(error);
       alert('업로드 중 에러가 발생했습니다.');
-    }
-  };
+    },
+  });
 
   const onClickButton = () => {
     imageRef.current?.click();
@@ -96,7 +101,7 @@ export default function PostForm({ me }: Props) {
   };
 
   return (
-    <form className={style.postForm} onSubmit={onSubmit}>
+    <form className={style.postForm} onSubmit={mutation.mutate}>
       <div className={style.postUserSection}>
         <div className={style.postUserImage}>
           <img src={me?.user?.image as string} alt={me?.user?.email as string} />
