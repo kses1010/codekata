@@ -1,5 +1,5 @@
 export async function getTrends() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/trends`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/hashtags/trends`, {
     next: {
       tags: ['trends'],
     },
@@ -11,8 +11,8 @@ export async function getTrends() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
+    throw new Error('Failed to fetch data');
   }
 
-  return res.json()
+  return res.json();
 }

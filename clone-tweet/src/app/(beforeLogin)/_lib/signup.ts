@@ -1,7 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { signIn } from '@/auth';
 
 export default async (prevState: any, formData: FormData) => {
   if (!formData.get('id') || !(formData.get('id') as string)?.trim()) {
@@ -16,6 +16,7 @@ export default async (prevState: any, formData: FormData) => {
   if (!formData.get('image')) {
     return { message: 'no_image' };
   }
+  formData.set('nickname', formData.get('name') as string);
   let shouldRedirect = false;
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users`, {
@@ -32,7 +33,7 @@ export default async (prevState: any, formData: FormData) => {
     await signIn('credentials', {
       username: formData.get('id'),
       password: formData.get('password'),
-      redirect: false,
+      redirect: true, // false 일 경우 무조건 response.ok가 되면서 에러정보가 없다.
     });
   } catch (err) {
     console.error(err);
