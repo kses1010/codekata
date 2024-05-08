@@ -16,8 +16,6 @@ export default function UserInfo({ username }: Props) {
     gcTime: 300 * 1000,
   });
 
-  console.log('error');
-  console.dir(error);
   if (error) {
     return (
       <>
