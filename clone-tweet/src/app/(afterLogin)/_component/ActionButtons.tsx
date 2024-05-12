@@ -12,6 +12,7 @@ type Props = {
   white?: boolean;
   post: Post;
 };
+
 export default function ActionButtons({ white, post }: Props) {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
