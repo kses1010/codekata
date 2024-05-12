@@ -1,27 +1,25 @@
 'use client';
 import style from './post.module.css';
 import cx from 'classnames';
-import {MouseEventHandler} from 'react';
-import {InfiniteData, useMutation, useQueryClient} from '@tanstack/react-query';
-import {Post} from '@/model/Post';
-import {useSession} from 'next-auth/react';
-import {useRouter} from 'next/navigation';
-// import { useModalStore } from '@/store/modal';
+import { MouseEventHandler } from 'react';
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Post } from '@/model/Post';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useModalStore } from '@/store/modal';
 
 type Props = {
   white?: boolean;
   post: Post;
 };
-
 export default function ActionButtons({ white, post }: Props) {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
-  const commented = !!post.Comments?.find((v) => v.userId === session?.user?.email);
   const reposted = !!post.Reposts?.find((v) => v.userId === session?.user?.email);
   const liked = !!post.Hearts?.find((v) => v.userId === session?.user?.email);
   const { postId } = post;
   const router = useRouter();
-  // const modalStore = useModalStore();
+  const modalStore = useModalStore();
 
   const heart = useMutation({
     mutationFn: () => {
@@ -350,8 +348,8 @@ export default function ActionButtons({ white, post }: Props) {
   const onClickComment: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
 
-    // modalStore.setMode('comment');
-    // modalStore.setData(post);
+    modalStore.setMode('comment');
+    modalStore.setData(post);
     router.push('/compose/tweet');
   };
 
