@@ -42,4 +42,5 @@ export default async (prevState: any, formData: FormData) => {
   if (shouldRedirect) {
     redirect('/home');
   }
+  return { message: null };
 };
