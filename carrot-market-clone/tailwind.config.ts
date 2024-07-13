@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      margin: {
+        tomato: '120px',
+      },
       borderRadius: {
         'hello-name': '11.11px',
       },
